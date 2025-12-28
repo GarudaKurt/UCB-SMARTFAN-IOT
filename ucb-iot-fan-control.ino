@@ -76,7 +76,7 @@ void loop() {
     firebaseMillis = now;
 
     int remote = firebase.remoteSpeed();
-    if (remote >= 0) {
+    if (remote >= 1) {
       targetSpeed = constrain(remote, 0, 255);
       firebaseActive = targetSpeed > 0;
       Serial.print("Firebase speed: ");
@@ -118,7 +118,6 @@ void moveForward(int speed) {
   digitalWrite(IN2, LOW);
   ledcWrite(ENA, speed);
 }
-
 void stopMotor() {
   digitalWrite(IN1, LOW);
   digitalWrite(IN2, LOW);
@@ -130,14 +129,14 @@ void pirMode() {
 
   if (motion == HIGH) {
     Serial.println("Motion detected!");
-    
-    // Stop motor
-    stopMotor();
     moveForward(180);
     display.showDisplay(180, "Manual");
 
     isActivateServo = false;
     resetServo(); 
+  } else {
+    Serial.println("Motion not detected!");
+    stopMotor();
   }
 }
 void servoSweep() {
